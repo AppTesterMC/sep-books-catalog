@@ -249,7 +249,7 @@ def main():
                     csv_files_data.append({
                         'filename': filename,
                         'date': formatted_date,
-                        'display': f"{formatted_date} - {filename}"
+                        'display': f"{formatted_date}"
                     })
                 except ValueError:
                     pass
@@ -258,7 +258,7 @@ def main():
         csv_files_data.insert(0, {
             'filename': 'latest.csv',
             'date': 'Latest',
-            'display': 'Latest (Most Recent)'
+            'display':  f"Τελευταία ενημέρωση ({formatted_date})"
         })
         
         # Save manifest as JSON
