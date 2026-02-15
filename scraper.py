@@ -245,7 +245,17 @@ def main():
                 date_str = filename.split('_')[0]
                 try:
                     date_obj = datetime.strptime(date_str, '%Y%m%d')
-                    formatted_date = date_obj.strftime('%d/%m/%Y')
+                    # Greek month names in genitive case (for dates)
+                    greek_months = [
+                        "Γενάρη", "Φλεβάρη", "Μάρτη", "Απρίλη", "Μάη", "Ιούνη",
+                        "Ιούλη", "Αύγουστο", "Σεπτέμβρη", "Οχτώβρη", "Νοέμβρη", "Δεκέμβρη"
+                    ]
+                    
+                    # Format: "day month_name year" to match JavaScript toLocaleDateString('el-GR')
+                    day = date_obj.day
+                    month_name = greek_months[date_obj.month - 1]
+                    year = date_obj.year
+                    formatted_date = f"{day} {month_name} {year}"
                     csv_files_data.append({
                         'filename': filename,
                         'date': formatted_date,
@@ -258,7 +268,7 @@ def main():
         csv_files_data.insert(0, {
             'filename': 'latest.csv',
             'date': 'Latest',
-            'display': 'Latest (Most Recent)'
+            'display': f"Πιο πρόσφατο ({formatted_date})"
         })
         
         # Save manifest as JSON
