@@ -3,7 +3,7 @@ name: Scrape Books Data
 on:
   # Run daily at 3 AM UTC
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 3 */3 * *'
   # Allow manual trigger
   workflow_dispatch:
   # Run on push to main for testing
