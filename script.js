@@ -9,9 +9,23 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
+// Fallback option when manifest fails or is empty
+function setFileSelectFallback(fileSelect) {
+    fileSelect.innerHTML = '<option value="data/latest.csv">Τελευταία ενημέρωση</option>';
+    return 'data/latest.csv';
+}
+
 // Load manifest of available CSV files
 async function loadManifest() {
     const fileSelect = document.getElementById('file-select');
+
+    // Timeout fallback: if manifest doesn't load within 5s, show default
+    const timeoutId = setTimeout(() => {
+        if (fileSelect.options.length === 1 && fileSelect.options[0].textContent === 'Φόρτωση...') {
+            currentFile = setFileSelectFallback(fileSelect);
+            loadBooksData(currentFile);
+        }
+    }, 5000);
     
     try {
         const response = await fetch('data/manifest.json');
@@ -19,7 +33,7 @@ async function loadManifest() {
         if (response.ok) {
             const manifest = await response.json();
             
-            // Clear existing options
+            if (Array.isArray(manifest) && manifest.length > 0) {
             fileSelect.innerHTML = '';
             
             // Populate dropdown
@@ -32,19 +46,19 @@ async function loadManifest() {
             
             // Load the default (first) file
             currentFile = fileSelect.value;
+            } else {
+                currentFile = setFileSelectFallback(fileSelect);
+            }
         } else {
-            // Fallback if manifest doesn't exist
-            fileSelect.innerHTML = '<option value="data/latest.csv">Latest (Most Recent)</option>';
-            currentFile = 'data/latest.csv';
+            currentFile = setFileSelectFallback(fileSelect);
         }
     } catch (error) {
         console.error('Error loading manifest:', error);
-        // Fallback
-        fileSelect.innerHTML = '<option value="data/latest.csv">Latest (Most Recent)</option>';
-        currentFile = 'data/latest.csv';
+        currentFile = setFileSelectFallback(fileSelect);
+    } finally {
+        clearTimeout(timeoutId);
     }
-    
-    // Load the initial data
+
     loadBooksData(currentFile);
 }
 
