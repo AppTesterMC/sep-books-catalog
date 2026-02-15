@@ -158,6 +158,7 @@ function parseCSVLine(line) {
 // Populate category filter dropdown
 function populateCategoryFilter() {
     const categoryFilter = document.getElementById('category-filter');
+    categoryFilter.innerHTML = '<option value="">Όλες οι κατηγορίες</option>';
     const categories = [...new Set(allBooks.map(book => book.category))].sort();
     
     categories.forEach(category => {
