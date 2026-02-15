@@ -234,6 +234,7 @@ def main():
         # Generate manifest of all CSV files
         csv_files = glob.glob('data/*.csv')
         csv_files_data = []
+        most_recent_date = None #Track the most recent date
         
         for csv_file in sorted(csv_files, reverse=True):
             filename = os.path.basename(csv_file)
@@ -256,6 +257,8 @@ def main():
                     month_name = greek_months[date_obj.month - 1]
                     year = date_obj.year
                     formatted_date = f"{day} {month_name} {year}"
+                    if most_recent_date is None:
+                        most_recent_date = formatted_date
                     csv_files_data.append({
                         'filename': filename,
                         'date': formatted_date,
@@ -268,7 +271,7 @@ def main():
         csv_files_data.insert(0, {
             'filename': 'latest.csv',
             'date': 'Latest',
-            'display': f"Πιο πρόσφατο ({formatted_date})"
+            'display': f"Πιο πρόσφατο ({most_recent_date})"
         })
         
         # Save manifest as JSON
