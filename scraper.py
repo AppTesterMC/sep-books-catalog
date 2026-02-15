@@ -213,6 +213,16 @@ def main():
     
     # Export data
     if extracted_data:
+        # Deduplicate by (title, ISBN) - keep first occurrence
+        seen = set()
+        unique_data = []
+        for item in extracted_data:
+            key = (item.get('title', '').strip(), item.get('ISBN', '').strip())
+            if key not in seen:
+                seen.add(key)
+                unique_data.append(item)
+        extracted_data = unique_data
+
         # Create data directory if it doesn't exist
         import os
         os.makedirs('data', exist_ok=True)
@@ -220,7 +230,11 @@ def main():
         dict_to_csv(extracted_data, output_filename)
         dict_to_csv(extracted_data, latest_filename)
         
-        print(f"\n✓ Successfully scraped {totalbooksnum} books")
+        dup_count = totalbooksnum - len(extracted_data)
+        if dup_count > 0:
+            print(f"\n✓ Successfully scraped {totalbooksnum} books ({dup_count} duplicates removed → {len(extracted_data)} unique)")
+        else:
+            print(f"\n✓ Successfully scraped {len(extracted_data)} books")
         print(f"✓ Data saved to: {output_filename}")
         print(f"✓ Latest data saved to: {latest_filename}")
     else:

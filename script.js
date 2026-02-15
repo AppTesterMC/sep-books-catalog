@@ -64,7 +64,14 @@ function parseCSV(csvText) {
         books.push(book);
     }
     
-    return books;
+    // Deduplicate by (title, ISBN) - keep first occurrence
+    const seen = new Set();
+    return books.filter(book => {
+        const key = `${(book.title || '').trim()}|${(book.ISBN || book.isbn || '').trim()}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
 }
 
 // Parse a single CSV line, handling quoted fields
