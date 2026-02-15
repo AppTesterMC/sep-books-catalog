@@ -26,26 +26,22 @@ async function loadManifest() {
             loadBooksData(currentFile);
         }
     }, 5000);
-    
+
     try {
         const response = await fetch('data/manifest.json');
-        
+
         if (response.ok) {
             const manifest = await response.json();
-            
+
             if (Array.isArray(manifest) && manifest.length > 0) {
-            fileSelect.innerHTML = '';
-            
-            // Populate dropdown
-            manifest.forEach(file => {
-                const option = document.createElement('option');
-                option.value = `data/${file.filename}`;
-                option.textContent = file.display;
-                fileSelect.appendChild(option);
-            });
-            
-            // Load the default (first) file
-            currentFile = fileSelect.value;
+                fileSelect.innerHTML = '';
+                manifest.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = `data/${file.filename}`;
+                    option.textContent = file.display;
+                    fileSelect.appendChild(option);
+                });
+                currentFile = fileSelect.value;
             } else {
                 currentFile = setFileSelectFallback(fileSelect);
             }
