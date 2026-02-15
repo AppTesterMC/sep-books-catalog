@@ -1,0 +1,22 @@
+[
+  {
+    "filename": "latest.csv",
+    "date": "Latest",
+    "display": "Τελευταία ενημέρωση (15 Φλεβάρη 2026)"
+  },
+  {
+    "filename": "20260215_sep_data.csv",
+    "date": "15/02/2026",
+    "display": "15 Φλεβάρη 2026"
+  },
+  {
+    "filename": "20260211_sep_data.csv",
+    "date": "11/02/2026",
+    "display": "11 Φλεβάρη 2026"
+  },
+  {
+    "filename": "20260210_sep_data.csv",
+    "date": "10/02/2026",
+    "display": "10 Φλεβάρη 2026"
+  }
+]

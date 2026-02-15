@@ -105,6 +105,8 @@ body {
     display: flex;
     gap: 3rem;
     animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+	align-items: flex-end;
+    flex-wrap: wrap;				
 }
 
 .stat-item {
@@ -129,6 +131,56 @@ body {
     font-weight: 300;
 }
 
+.file-selector-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.file-selector-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+    font-weight: 300;
+}
+
+.file-select {
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--primary-bg);
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23faf8f5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 14px;
+    min-width: 200px;
+}
+
+.file-select:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+.file-select:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.file-select option {
+    background: var(--text-primary);
+    color: var(--primary-bg);
+}
 /* Main Content */
 .main-content {
     max-width: 1400px;
@@ -411,12 +463,22 @@ body {
     .header-stats {
         align-self: stretch;
         justify-content: space-between;
+        gap: 1.5rem;					
     }
     
     .stat-item {
         align-items: flex-start;
     }
     
+    .file-selector-container {
+        align-items: flex-start;
+        align-self: stretch;
+    }
+    
+    .file-select {
+        width: 100%;
+    }
+	
     .main-content {
         padding: 2rem 1rem;
     }

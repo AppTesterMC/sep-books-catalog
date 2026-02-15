@@ -1,22 +1,66 @@
 // Global variables
 let allBooks = [];
 let filteredBooks = [];
+let currentFile = 'data/latest.csv';					
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-    loadBooksData();
+    loadManifest();
     setupEventListeners();
 });
 
+// Load manifest of available CSV files
+async function loadManifest() {
+    const fileSelect = document.getElementById('file-select');
+    
+    try {
+        const response = await fetch('data/manifest.json');
+        
+        if (response.ok) {
+            const manifest = await response.json();
+            
+            // Clear existing options
+            fileSelect.innerHTML = '';
+            
+            // Populate dropdown
+            manifest.forEach(file => {
+                const option = document.createElement('option');
+                option.value = `data/${file.filename}`;
+                option.textContent = file.display;
+                fileSelect.appendChild(option);
+            });
+            
+            // Load the default (first) file
+            currentFile = fileSelect.value;
+        } else {
+            // Fallback if manifest doesn't exist
+            fileSelect.innerHTML = '<option value="data/latest.csv">Latest (Most Recent)</option>';
+            currentFile = 'data/latest.csv';
+        }
+    } catch (error) {
+        console.error('Error loading manifest:', error);
+        // Fallback
+        fileSelect.innerHTML = '<option value="data/latest.csv">Latest (Most Recent)</option>';
+        currentFile = 'data/latest.csv';
+    }
+    
+    // Load the initial data
+    loadBooksData(currentFile);
+}
+
 // Load books data from CSV
-async function loadBooksData() {
+async function loadBooksData(filename = 'data/latest.csv') {
     const loadingEl = document.getElementById('loading');
     const errorEl = document.getElementById('error');
     const tableContainer = document.querySelector('.table-container');
     
+	    // Show loading state
+    loadingEl.style.display = 'block';
+    tableContainer.style.display = 'none';
+    errorEl.style.display = 'none';
     try {
-        // Try to load the latest CSV file
-        const response = await fetch('data/latest.csv');
+        // Try to load the specified CSV file
+         const response = await fetch(filename);
         
         if (!response.ok) {
             throw new Error('Failed to fetch data');
@@ -32,7 +76,7 @@ async function loadBooksData() {
         
         // Populate the UI
         populateCategoryFilter();
-        updateStats();
+        updateStats(filename);
         renderBooks();
         
     } catch (error) {
@@ -117,18 +161,46 @@ function populateCategoryFilter() {
 }
 
 // Update header statistics
-function updateStats() {
+function updateStats(filename) {
     const totalBooksEl = document.getElementById('total-books');
     const lastUpdatedEl = document.getElementById('last-updated');
     
     totalBooksEl.textContent = allBooks.length.toLocaleString('el-GR');
     
-    const today = new Date();
-    lastUpdatedEl.textContent = today.toLocaleDateString('el-GR', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-    });
+    // Extract date from filename if it's a dated file
+    const filenameOnly = filename.split('/').pop();
+    
+    if (filenameOnly.startsWith('20') && filenameOnly.includes('_sep_data.csv')) {
+        // Format: YYYYMMDD_sep_data.csv
+        const dateStr = filenameOnly.split('_')[0];
+        try {
+            const year = dateStr.substring(0, 4);
+            const month = dateStr.substring(4, 6);
+            const day = dateStr.substring(6, 8);
+            const date = new Date(year, parseInt(month) - 1, day);
+            
+            lastUpdatedEl.textContent = date.toLocaleDateString('el-GR', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        } catch (error) {
+            const today = new Date();
+            lastUpdatedEl.textContent = today.toLocaleDateString('el-GR', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+    } else {
+        // Default to today's date for latest.csv
+        const today = new Date();
+        lastUpdatedEl.textContent = today.toLocaleDateString('el-GR', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    }
 }
 
 // Render books in the table
@@ -200,7 +272,13 @@ function setupEventListeners() {
     const searchInput = document.getElementById('search');
     const categoryFilter = document.getElementById('category-filter');
     const sortSelect = document.getElementById('sort-select');
+	const fileSelect = document.getElementById('file-select');
     
+    // File selector
+    fileSelect.addEventListener('change', (e) => {
+        currentFile = e.target.value;
+        loadBooksData(currentFile);
+    });						
     // Search with debounce
     let searchTimeout;
     searchInput.addEventListener('input', (e) => {

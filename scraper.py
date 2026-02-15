@@ -225,11 +225,46 @@ def main():
 
         # Create data directory if it doesn't exist
         import os
+        import glob
         os.makedirs('data', exist_ok=True)
         
         dict_to_csv(extracted_data, output_filename)
         dict_to_csv(extracted_data, latest_filename)
         
+        # Generate manifest of all CSV files
+        csv_files = glob.glob('data/*.csv')
+        csv_files_data = []
+        
+        for csv_file in sorted(csv_files, reverse=True):
+            filename = os.path.basename(csv_file)
+            if filename == 'latest.csv':
+                continue
+            
+            # Extract date from filename (format: YYYYMMDD_sep_data.csv)
+            if filename.endswith('_sep_data.csv'):
+                date_str = filename.split('_')[0]
+                try:
+                    date_obj = datetime.strptime(date_str, '%Y%m%d')
+                    formatted_date = date_obj.strftime('%d/%m/%Y')
+                    csv_files_data.append({
+                        'filename': filename,
+                        'date': formatted_date,
+                        'display': f"{formatted_date} - {filename}"
+                    })
+                except ValueError:
+                    pass
+        
+        # Add latest.csv at the beginning
+        csv_files_data.insert(0, {
+            'filename': 'latest.csv',
+            'date': 'Latest',
+            'display': 'Latest (Most Recent)'
+        })
+        
+        # Save manifest as JSON
+        with open('data/manifest.json', 'w', encoding='utf-8') as f:
+            json.dump(csv_files_data, f, ensure_ascii=False, indent=2)
+            
         dup_count = totalbooksnum - len(extracted_data)
         if dup_count > 0:
             print(f"\n✓ Successfully scraped {totalbooksnum} books ({dup_count} duplicates removed → {len(extracted_data)} unique)")
@@ -237,6 +272,7 @@ def main():
             print(f"\n✓ Successfully scraped {len(extracted_data)} books")
         print(f"✓ Data saved to: {output_filename}")
         print(f"✓ Latest data saved to: {latest_filename}")
+        print(f"✓ Manifest updated with {len(csv_files_data)} files")
     else:
         print("\n✗ No data was extracted")
 
