@@ -1,5 +1,7 @@
 # SEP Books Catalog
 
+[Visit the Catalog](https://apptestermc.github.io/sep-books-catalog/)
+
 A beautiful, automatically-updated catalog of books from Σύγχρονη Εποχή Εκδόσεις (sep.gr), hosted on GitHub Pages.
 
 ## 🌟 Features
@@ -17,7 +19,7 @@ A beautiful, automatically-updated catalog of books from Σύγχρονη Επο
 ### 1. Fork or Clone This Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/sep-books-catalog.git
+git clone https://github.com/AppTesterMC/sep-books-catalog.git
 cd sep-books-catalog
 ```
 
