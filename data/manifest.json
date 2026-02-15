@@ -2,21 +2,36 @@
   {
     "filename": "latest.csv",
     "date": "Latest",
-    "display": "Τελευταία ενημέρωση (15 Φλεβάρη 2026)"
+    "display": "Latest (Most Recent)"
   },
   {
     "filename": "20260215_sep_data.csv",
     "date": "15/02/2026",
-    "display": "15 Φλεβάρη 2026"
+    "display": "15/02/2026 - 20260215_sep_data.csv"
   },
   {
     "filename": "20260211_sep_data.csv",
     "date": "11/02/2026",
-    "display": "11 Φλεβάρη 2026"
+    "display": "11/02/2026 - 20260211_sep_data.csv"
   },
   {
     "filename": "20260210_sep_data.csv",
     "date": "10/02/2026",
-    "display": "10 Φλεβάρη 2026"
+    "display": "10/02/2026 - 20260210_sep_data.csv"
+  },
+  {
+    "filename": "20260203_sep_data.csv",
+    "date": "03/02/2026",
+    "display": "03/02/2026 - 20260203_sep_data.csv"
+  },
+  {
+    "filename": "20260127_sep_data.csv",
+    "date": "27/01/2026",
+    "display": "27/01/2026 - 20260127_sep_data.csv"
+  },
+  {
+    "filename": "20260107_sep_data.csv",
+    "date": "07/01/2026",
+    "display": "07/01/2026 - 20260107_sep_data.csv"
   }
 ]
