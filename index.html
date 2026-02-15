@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Κατάλογος Βιβλίων ΣΕΠ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    
+    <header class="site-header">
+        <div class="header-content">
+            <div class="title-block">
+                <h1 class="site-title">Κατάλογος Βιβλίων</h1>
+                <div class="subtitle">Σύγχρονη Εποχή Εκδόσεις</div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="total-books">—</span>
+                    <span class="stat-label">Βιβλία</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="last-updated">—</span>
+                    <span class="stat-label">Τελευταία ενημέρωση</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="controls-section">
+            <div class="search-container">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" id="search" placeholder="Αναζήτηση βιβλίων, συγγραφέων, εκδοτών..." class="search-input">
+            </div>
+            
+            <div class="filters">
+                <select id="category-filter" class="filter-select">
+                    <option value="">Όλες οι κατηγορίες</option>
+                </select>
+                
+                <select id="sort-select" class="filter-select">
+                    <option value="title-asc">Τίτλος (Α-Ω)</option>
+                    <option value="title-desc">Τίτλος (Ω-Α)</option>
+                    <option value="author-asc">Συγγραφέας (Α-Ω)</option>
+                    <option value="author-desc">Συγγραφέας (Ω-Α)</option>
+                    <option value="price-asc">Τιμή (Χαμηλή-Υψηλή)</option>
+                    <option value="price-desc">Τιμή (Υψηλή-Χαμηλή)</option>
+                    <option value="date-desc">Ημερομηνία (Νεότερη)</option>
+                    <option value="date-asc">Ημερομηνία (Παλαιότερη)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-info">
+            <span id="results-count">Φόρτωση...</span>
+        </div>
+
+        <div class="table-container">
+            <table class="books-table">
+                <thead>
+                    <tr>
+                        <th data-sort="title">Τίτλος</th>
+                        <th data-sort="author">Συγγραφέας</th>
+                        <th data-sort="publisher">Εκδότης</th>
+                        <th data-sort="category">Κατηγορία</th>
+                        <th data-sort="date">Ημερομηνία</th>
+                        <th data-sort="pages">Σελίδες</th>
+                        <th data-sort="isbn">ISBN</th>
+                        <th data-sort="price">Τιμή</th>
+                    </tr>
+                </thead>
+                <tbody id="books-tbody">
+                    <!-- Books will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="loading-state" id="loading">
+            <div class="spinner"></div>
+            <p>Φόρτωση βιβλίων...</p>
+        </div>
+
+        <div class="error-state" id="error" style="display: none;">
+            <p>Σφάλμα κατά τη φόρτωση των δεδομένων. Παρακαλώ δοκιμάστε ξανά αργότερα.</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>Δεδομένα από <a href="https://sep.gr" target="_blank">sep.gr</a> • Ενημερώνεται καθημερινά</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
