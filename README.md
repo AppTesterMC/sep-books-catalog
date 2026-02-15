@@ -6,7 +6,10 @@ A beautiful, automatically-updated catalog of books from Σύγχρονη Επο
 
 ## 🌟 Features
 
-- **Automated Daily Updates**: GitHub Actions scrapes book data every day at 3 AM UTC
+- **Automated Updates Every 3 Days**: GitHub Actions scrapes book data every 3 days at 3 AM UTC
+- **Deduplication**: Automatically removes duplicate books based on title and ISBN
+- **Historical Data**: View and compare book catalogs from different dates
+- **File Selector**: Choose which date's catalog to display from the dropdown
 - **Beautiful Interface**: Modern, literary-inspired design with smooth animations
 - **Real-time Search**: Filter books by title, author, publisher, or ISBN
 - **Category Filtering**: Browse by book category
@@ -58,6 +61,8 @@ sep-books-catalog/
 │   └── workflows/
 │       └── scrape.yml          # GitHub Actions workflow
 ├── data/
+│   ├── manifest.json           # List of available CSV files (auto-generated)
+│   ├── YYYYMMDD_sep_data.csv   # Historical data files (auto-generated)
 │   └── latest.csv              # Latest scraped book data (auto-generated)
 ├── index.html                  # Main webpage
 ├── style.css                   # Styles
@@ -110,7 +115,10 @@ Edit `.github/workflows/scrape.yml` and modify the cron schedule:
 
 ```yaml
 schedule:
-  - cron: '0 3 * * *'  # Runs at 3 AM UTC daily
+  - cron: '0 3 */3 * *'  # Current: Every 3 days at 3 AM UTC
+  - cron: '0 3 * * *'    # Example: Daily at 3 AM UTC
+  - cron: '0 */6 * * *'  # Example: Every 6 hours
+  - cron: '0 0 * * 0'    # Example: Weekly on Sundays
 ```
 
 [Cron syntax reference](https://crontab.guru/)
