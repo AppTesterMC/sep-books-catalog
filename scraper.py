@@ -277,7 +277,7 @@ def main():
             # Use current date formatted in Greek for the latest entry
             current_date_obj = datetime.now()
             
-            latest_date = f"{current_date_obj.day} {greek_months[current_date_obj.month - 1]} {current_date_obj.year}":
+            latest_date = f"{current_date_obj.day} {greek_months[current_date_obj.month - 1]} {current_date_obj.year}"
             csv_files_data.insert(0, {
                 'filename': 'latest.csv',
                 'date': most_recent_date,
