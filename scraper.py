@@ -169,7 +169,8 @@ def extract_product(url):
 def main():
     """Main scraping function."""
     extracted_data = []
-    thislist = ["biblia-poy-diathetei-h-se", "vivlia-allon-ekdoton", "politiki-kai-koinonia",
+    thislist = ["","omilos-ekpaideytikoy-provlimatismoy","biblia-poy-diathetei-h-se",
+                "vivlia-allon-ekdoton", "politiki-kai-koinonia",
                 "ellhnikh-logotexnia", "paidiki-logotechnia", "marx-engkels-lenin",
                 "komix-geloiografies", "xeni-logotechnia", "vivlia-gnoseon-vivlia"]
     
