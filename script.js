@@ -84,6 +84,9 @@ async function loadBooksData(filename = 'data/latest.csv') {
         loadingEl.style.display = 'none';
         tableContainer.style.display = 'block';
         
+        //Reset filters when loading a new file
+        resetFilters();
+        
         // Populate the UI
         populateCategoryFilter();
         updateStats(filename);
@@ -94,6 +97,17 @@ async function loadBooksData(filename = 'data/latest.csv') {
         loadingEl.style.display = 'none';
         errorEl.style.display = 'block';
     }
+}
+
+// Reset all filters to default state
+function resetFilters() {
+    const searchInput = document.getElementById('search');
+    const categoryFilter = document.getElementById('category-filter');
+    const sortSelect = document.getElementById('sort-select');
+    
+    searchInput.value = '';
+    categoryFilter.value = '';
+    sortSelect.value = 'date-desc';
 }
 
 // Parse CSV text into array of objects
@@ -158,6 +172,7 @@ function parseCSVLine(line) {
 // Populate category filter dropdown
 function populateCategoryFilter() {
     const categoryFilter = document.getElementById('category-filter');
+    categoryFilter.innerHTML = '<option value="">Όλες οι κατηγορίες</option>';
     const categories = [...new Set(allBooks.map(book => book.category))].sort();
     
     categories.forEach(category => {

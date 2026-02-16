@@ -1,9 +1,9 @@
 name: Scrape Books Data
 
 on:
-  # Run daily at 3 AM UTC
+  # Run every 3 days at 3 AM UTC
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 3 */3 * *'
   # Allow manual trigger
   workflow_dispatch:
   # Run on push to main for testing
@@ -41,6 +41,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+          
+    - name: Pull latest changes
+      run: |
+        git pull origin main
         
     - name: Run scraper
       run: |
@@ -53,6 +57,7 @@ jobs:
         git add data/
         if ! git diff --staged --quiet; then
           git commit -m "Update book data - $(date +'%Y-%m-%d %H:%M:%S')"
-          git pull --rebase origin main
-          git push
+          git push origin main
+        else
+          echo "No changes to commit"
         fi

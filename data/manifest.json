@@ -2,36 +2,41 @@
   {
     "filename": "latest.csv",
     "date": "Latest",
-    "display": "Πιο πρόσφατο (7 Γενάρη 2026)"
+    "display": "Πιο πρόσφατο (16 Φλεβάρη 2026)"
+  },
+  {
+    "filename": "20260216_sep_data.csv",
+    "date": "16 Φλεβάρη 2026",
+    "display": "16 Φλεβάρη 2026"
   },
   {
     "filename": "20260215_sep_data.csv",
     "date": "15 Φλεβάρη 2026",
-    "display": "15 Φλεβάρη 2026 - 20260215_sep_data.csv"
+    "display": "15 Φλεβάρη 2026"
   },
   {
     "filename": "20260211_sep_data.csv",
     "date": "11 Φλεβάρη 2026",
-    "display": "11 Φλεβάρη 2026 - 20260211_sep_data.csv"
+    "display": "11 Φλεβάρη 2026"
   },
   {
     "filename": "20260210_sep_data.csv",
     "date": "10 Φλεβάρη 2026",
-    "display": "10 Φλεβάρη 2026 - 20260210_sep_data.csv"
+    "display": "10 Φλεβάρη 2026"
   },
   {
     "filename": "20260203_sep_data.csv",
     "date": "3 Φλεβάρη 2026",
-    "display": "3 Φλεβάρη 2026 - 20260203_sep_data.csv"
+    "display": "3 Φλεβάρη 2026"
   },
   {
     "filename": "20260127_sep_data.csv",
     "date": "27 Γενάρη 2026",
-    "display": "27 Γενάρη 2026 - 20260127_sep_data.csv"
+    "display": "27 Γενάρη 2026"
   },
   {
     "filename": "20260107_sep_data.csv",
     "date": "7 Γενάρη 2026",
-    "display": "7 Γενάρη 2026 - 20260107_sep_data.csv"
+    "display": "7 Γενάρη 2026"
   }
 ]
