@@ -262,7 +262,7 @@ def main():
                     csv_files_data.append({
                         'filename': filename,
                         'date': formatted_date,
-                        'display': f"{formatted_date} - {filename}"
+                        'display': f"{formatted_date}"
                     })
                 except ValueError:
                     pass
