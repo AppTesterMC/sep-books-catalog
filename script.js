@@ -114,7 +114,7 @@ async function loadBooksData(filename = 'data/latest.csv') {
         // Populate the UI
         populateCategoryFilter();
         updateTotalBooks();
-        renderBooks();
+        applyFilters();
         
     } catch (error) {
         console.error('Error loading books:', error);
