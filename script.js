@@ -41,7 +41,7 @@ async function loadManifest() {
                 manifest.forEach(file => {
                     const option = document.createElement('option');
                     option.value = `data/${file.filename}`;
-					option.textContent = file.date; // Use just the date for display
+					option.textContent = file.display; 
 					option.dataset.isLatest = file.filename === 'latest.csv' ? 'true' : 'false';
                     fileSelect.appendChild(option);
                 });
