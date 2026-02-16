@@ -221,6 +221,8 @@ def main():
             if key not in seen:
                 seen.add(key)
                 unique_data.append(item)
+        
+        dup_count = len(extracted_data) - len(unique_data)
         extracted_data = unique_data
 
         # Create data directory if it doesn't exist
@@ -236,6 +238,12 @@ def main():
         csv_files_data = []
         most_recent_date = None #Track the most recent date
         
+        # Greek month names in genitive case (for dates)
+        greek_months = [
+            "Γενάρη", "Φλεβάρη", "Μάρτη", "Απρίλη", "Μάη", "Ιούνη",
+            "Ιούλη", "Αύγουστο", "Σεπτέμβρη", "Οχτώβρη", "Νοέμβρη", "Δεκέμβρη"
+        ]
+
         for csv_file in sorted(csv_files, reverse=True):
             filename = os.path.basename(csv_file)
             if filename == 'latest.csv':
@@ -246,41 +254,42 @@ def main():
                 date_str = filename.split('_')[0]
                 try:
                     date_obj = datetime.strptime(date_str, '%Y%m%d')
-                    # Greek month names in genitive case (for dates)
-                    greek_months = [
-                        "Γενάρη", "Φλεβάρη", "Μάρτη", "Απρίλη", "Μάη", "Ιούνη",
-                        "Ιούλη", "Αύγουστο", "Σεπτέμβρη", "Οχτώβρη", "Νοέμβρη", "Δεκέμβρη"
-                    ]
                     
                     # Format: "day month_name year" to match JavaScript toLocaleDateString('el-GR')
                     day = date_obj.day
                     month_name = greek_months[date_obj.month - 1]
                     year = date_obj.year
-                    formatted_date = f"{day} {month_name} {year}"
+                    formatted_date = date_obj.strftime('%d/%m/%Y')
+                    display_date = f"{day} {month_name} {year}"
+                    # Capture the first (most recent) date
                     if most_recent_date is None:
                         most_recent_date = formatted_date
                     csv_files_data.append({
                         'filename': filename,
                         'date': formatted_date,
-                        'display': f"{formatted_date}"
+                        'display': display_date
                     })
                 except ValueError:
                     pass
         
         # Add latest.csv at the beginning
-        # Use current date formatted in Greek for the latest entry
-        current_date_obj = datetime.now()
-        greek_months = [
-            "Γενάρη", "Φλεβάρη", "Μάρτη", "Απρίλη", "Μάη", "Ιούνη",
-            "Ιούλη", "Αύγουστο", "Σεπτέμβρη", "Οχτώβρη", "Νοέμβρη", "Δεκέμβρη"
-        ]
-        latest_formatted_date = f"{current_date_obj.day} {greek_months[current_date_obj.month - 1]} {current_date_obj.year}"
-        
-        csv_files_data.insert(0, {
-            'filename': 'latest.csv',
-            'date': 'Latest',
-            'display': f"Πιο πρόσφατο ({most_recent_date})"
-        })
+        if most_recent_date:
+            # Use current date formatted in Greek for the latest entry
+            current_date_obj = datetime.now()
+            
+            latest_date = f"{current_date_obj.day} {greek_months[current_date_obj.month - 1]} {current_date_obj.year}":
+            csv_files_data.insert(0, {
+                'filename': 'latest.csv',
+                'date': most_recent_date,
+                'display': latest_date
+            })
+        else:
+            # Fallback if no dated files exist
+            csv_files_data.insert(0, {
+                'filename': 'latest.csv',
+                'date': 'Latest',
+                'display': 'Latest'
+            })
         
         # Save manifest as JSON
         with open('data/manifest.json', 'w', encoding='utf-8') as f:

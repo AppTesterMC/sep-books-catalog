@@ -11,8 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Fallback option when manifest fails or is empty
 function setFileSelectFallback(fileSelect) {
-    fileSelect.innerHTML = '<option value="data/latest.csv">Τελευταία ενημέρωση</option>';
-    return 'data/latest.csv';
+    fileSelect.innerHTML = '<option value="data/latest.csv" data-is-latest="true">Τελευταία ενημέρωση</option>';
+	updateDateLabel();
+    return 'data/latest.csv';	
 }
 
 // Load manifest of available CSV files
@@ -34,14 +35,20 @@ async function loadManifest() {
             const manifest = await response.json();
 
             if (Array.isArray(manifest) && manifest.length > 0) {
+				// Clear existing options
                 fileSelect.innerHTML = '';
+				 // Populate dropdown				
                 manifest.forEach(file => {
                     const option = document.createElement('option');
                     option.value = `data/${file.filename}`;
-                    option.textContent = file.display;
+					option.textContent = file.date; // Use just the date for display
+					option.dataset.isLatest = file.filename === 'latest.csv' ? 'true' : 'false';
                     fileSelect.appendChild(option);
                 });
+				// Load the default (first) file
                 currentFile = fileSelect.value;
+				// Update label visibility
+				updateDateLabel();
             } else {
                 currentFile = setFileSelectFallback(fileSelect);
             }
@@ -53,9 +60,26 @@ async function loadManifest() {
         currentFile = setFileSelectFallback(fileSelect);
     } finally {
         clearTimeout(timeoutId);
-    }
+    } 
+    // Load the initial data
+    loadBooksData(currentFile);	 
+}
 
-    loadBooksData(currentFile);
+// Update date label visibility based on selected file
+function updateDateLabel() {
+    const fileSelect = document.getElementById('file-select');
+    const dateLabel = document.getElementById('date-label');
+    const fileLabel = document.getElementById('file-label');
+    fileLabel.classList.add('hidden');
+    const selectedOption = fileSelect.options[fileSelect.selectedIndex];
+    const isLatest = selectedOption.dataset.isLatest === 'true';
+    
+    if (isLatest) {
+        dateLabel.classList.remove('hidden');
+    } else {
+        dateLabel.classList.add('hidden');
+        fileLabel.classList.remove('hidden');
+    }
 }
 
 // Load books data from CSV
@@ -64,7 +88,7 @@ async function loadBooksData(filename = 'data/latest.csv') {
     const errorEl = document.getElementById('error');
     const tableContainer = document.querySelector('.table-container');
     
-	    // Show loading state
+	 // Show loading state
     loadingEl.style.display = 'block';
     tableContainer.style.display = 'none';
     errorEl.style.display = 'none';
@@ -89,7 +113,7 @@ async function loadBooksData(filename = 'data/latest.csv') {
         
         // Populate the UI
         populateCategoryFilter();
-        updateStats(filename);
+        updateTotalBooks();
         renderBooks();
         
     } catch (error) {
@@ -172,6 +196,7 @@ function parseCSVLine(line) {
 // Populate category filter dropdown
 function populateCategoryFilter() {
     const categoryFilter = document.getElementById('category-filter');
+	// Clear existing options and re-add the default "All categories" option
     categoryFilter.innerHTML = '<option value="">Όλες οι κατηγορίες</option>';
     const categories = [...new Set(allBooks.map(book => book.category))].sort();
     
@@ -183,6 +208,12 @@ function populateCategoryFilter() {
             categoryFilter.appendChild(option);
         }
     });
+}
+
+// Update total books count in header
+function updateTotalBooks() {
+    const totalBooksEl = document.getElementById('total-books');
+    totalBooksEl.textContent = allBooks.length.toLocaleString('el-GR');
 }
 
 // Update header statistics
@@ -302,6 +333,7 @@ function setupEventListeners() {
     // File selector
     fileSelect.addEventListener('change', (e) => {
         currentFile = e.target.value;
+		updateDateLabel();
         loadBooksData(currentFile);
     });						
     // Search with debounce
