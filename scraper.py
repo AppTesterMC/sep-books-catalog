@@ -145,7 +145,7 @@ def extract_product(url):
     # Construct issue info
     if year:
         issue_info = f"{month} {year}".strip()
-    else if repub_year:
+    elif repub_year:
         if repub_info:
             issue_info = f"{repub_month} {repub_year}({repub_info} έκδοση)".strip()
         else:
