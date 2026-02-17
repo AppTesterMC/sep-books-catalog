@@ -23,6 +23,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 #full history so rebase works correctly
       
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -57,6 +59,7 @@ jobs:
         git add data/
         if ! git diff --staged --quiet; then
           git commit -m "Update book data - $(date +'%Y-%m-%d %H:%M:%S')"
+          git pull --rebase origin main
           git push origin main
         else
           echo "No changes to commit"
