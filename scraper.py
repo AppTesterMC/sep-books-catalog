@@ -127,6 +127,9 @@ def extract_product(url):
     month_elem = parser.find('div', {'id': 'brxe-fuowkl'})
     month = month_elem.text.replace('Μήνας Έκδοσης:', '').replace(',', '$') if month_elem else ''
     
+    repub_month_elem = parser.find('div', {'id': 'brxe-abckyu'})
+    repub_month = repub_month_elem.text.replace('Μήνας Επανέκδοσης:', '').replace(',', '$') if month_elem else ''
+    
     repub_year_elem = parser.find('div', {'id': 'brxe-htsaka'})
     repub_year = repub_year_elem.text.replace('Έτος Επανέκδοσης:', '').replace(',', '$') if repub_year_elem else ''
     
@@ -140,14 +143,16 @@ def extract_product(url):
     repub_info = repub_info_elem.text.replace('Έκδοση:', '').replace(',', '$') if repub_info_elem else ''
     
     # Construct issue info
-    issue_info = f"{month} {year}".strip()
-    if not year:
-        if repub_year:
-            if repub_info:
-                issue_info = f"{repub_year}({repub_info} έκδοση)"
-            else:
-                issue_info = repub_year
-    
+    if year:
+        issue_info = f"{month} {year}".strip()
+    else if repub_year:
+        if repub_info:
+            issue_info = f"{repub_month} {repub_year}({repub_info} έκδοση)".strip()
+        else:
+            issue_info = f"{repub_month} {repub_year}".strip()
+    else:
+        issue_info = ''
+        
     num_pages_elem = parser.find('div', {'data-script-id': 'ytsgdu'})
     num_pages = num_pages_elem.text.replace('Σελίδες:', '').replace(',', '$') if num_pages_elem else ''
     
