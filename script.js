@@ -37,7 +37,8 @@ const GREEK_MONTHS = {
     'νοέμβριος': 10, 'νοεμβριος': 10,
     'δεκέμβριος': 11, 'δεκεμβριος': 11,
     // Alternative spellings
-    'οχτώβρης': 9, 'οχτωβρης': 9
+    'οχτώβρης': 9, 'οχτωβρης': 9,
+    'ιούνη': 6, 'ιουνη': 6
 };
 
 /**
@@ -54,6 +55,12 @@ function parseGreekDate(dateStr) {
     
     const cleanDate = dateStr.trim();
     
+    // Check for year with edition in parentheses
+    const editionMatch = cleanDate.match(/^\d{4}\s*\(/);
+    if (editionMatch) {
+        return parseInt(editionMatch[1])* 100;
+    }
+    
     // Check if it's just a year (4 digits)
     if (/^\d{4}$/.test(cleanDate)) {
         return parseInt(cleanDate) * 100; // e.g., 1995 -> 199500
@@ -63,11 +70,11 @@ function parseGreekDate(dateStr) {
     const parts = cleanDate.split(/\s+/);
     
     if (parts.length === 1) {
-        // Only month name, no year - treat as year 0
+        // Only month name, no year - treat as year 2025
         const monthName = parts[0].toLowerCase();
         const monthNum = GREEK_MONTHS[monthName];
         if (monthNum !== undefined) {
-            return monthNum + 1; // Returns 1-12 for months without year
+            return 2025*100 + (monthNum + 1); // Returns 1-12 for months without year
         }
         return 0;
     }
