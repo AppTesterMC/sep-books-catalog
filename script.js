@@ -58,7 +58,7 @@ function parseGreekDate(dateStr) {
     // Check for year with edition in parentheses
     const editionMatch = cleanDate.match(/^\d{4}\s*\(/);
     if (editionMatch) {
-        return parseInt(editionMatch[1])* 100;
+        return parseInt(editionMatch[0])* 100;
     }
     
     // Check if it's just a year (4 digits)
