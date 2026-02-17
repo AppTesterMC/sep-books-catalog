@@ -494,7 +494,7 @@ function applyFilters() {
             bVal = parseGreekDate(b.date);
         }
         // Special handling for price sorting
-        elseif (sortKey === 'price') {
+        else if (sortKey === 'price') {
             aVal = parseFloat((a.discount_price || a.price || '0').replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
             bVal = parseFloat((b.discount_price || b.price || '0').replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
         }
