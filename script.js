@@ -9,6 +9,87 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
+// Greek month name mappings for date parsing
+const GREEK_MONTHS = {
+    // Demotic (modern colloquial) forms
+    'γενάρης': 0, 'γεναρης': 0,
+    'φλεβάρης': 1, 'φλεβαρης': 1,
+    'μάρτης': 2, 'μαρτης': 2,
+    'απρίλης': 3, 'απριλης': 3,
+    'μάης': 4, 'μαης': 4,
+    'ιούνης': 5, 'ιουνης': 5,
+    'ιούλης': 6, 'ιουλης': 6,
+    'αύγουστος': 7, 'αυγουστος': 7,
+    'σεπτέμβρης': 8, 'σεπτεμβρης': 8,
+    'οκτώβρης': 9, 'οκτωβρης': 9,
+    'νοέμβρης': 10, 'νοεμβρης': 10,
+    'δεκέμβρης': 11, 'δεκεμβρης': 11,
+    // Formal (katharevousa) forms
+    'ιανουάριος': 0, 'ιανουαριος': 0,
+    'φεβρουάριος': 1, 'φεβρουαριος': 1,
+    'μάρτιος': 2, 'μαρτιος': 2,
+    'απρίλιος': 3, 'απριλιος': 3,
+    'μάιος': 4, 'μαιος': 4,
+    'ιούνιος': 5, 'ιουνιος': 5,
+    'ιούλιος': 6, 'ιουλιος': 6,
+    'σεπτέμβριος': 8, 'σεπτεμβριος': 8,
+    'οκτώβριος': 9, 'οκτωβριος': 9,
+    'νοέμβριος': 10, 'νοεμβριος': 10,
+    'δεκέμβριος': 11, 'δεκεμβριος': 11,
+    // Alternative spellings
+    'οχτώβρης': 9, 'οχτωβρης': 9
+};
+
+/**
+ * Parse Greek date string and return a comparable numeric value
+ * Handles three formats:
+ * 1. Year only: "1995"
+ * 2. Demotic month + year: "Φλεβάρης 2025"
+ * 3. Formal month + year: "Φεβρουάριος 2022"
+ * 
+ * Returns: YYYYMM as number (e.g., 202502) or YYYY00 for year-only dates
+ */
+function parseGreekDate(dateStr) {
+    if (!dateStr) return 0;
+    
+    const cleanDate = dateStr.trim();
+    
+    // Check if it's just a year (4 digits)
+    if (/^\d{4}$/.test(cleanDate)) {
+        return parseInt(cleanDate) * 100; // e.g., 1995 -> 199500
+    }
+    
+    // Try to parse "Month Year" format
+    const parts = cleanDate.split(/\s+/);
+    
+    if (parts.length === 1) {
+        // Only month name, no year - treat as year 0
+        const monthName = parts[0].toLowerCase();
+        const monthNum = GREEK_MONTHS[monthName];
+        if (monthNum !== undefined) {
+            return monthNum + 1; // Returns 1-12 for months without year
+        }
+        return 0;
+    }
+    
+    if (parts.length >= 2) {
+        const monthName = parts[0].toLowerCase();
+        const year = parseInt(parts[parts.length - 1]);
+        
+        if (!isNaN(year)) {
+            const monthNum = GREEK_MONTHS[monthName];
+            
+            if (monthNum !== undefined) {
+                // Return YYYYMM format (e.g., Φλεβάρης 2025 -> 202502)
+                return year * 100 + (monthNum + 1);
+            }
+        }
+    }
+    
+    // If we can't parse it, return 0
+    return 0;
+}
+
 // Fallback option when manifest fails or is empty
 function setFileSelectFallback(fileSelect) {
     fileSelect.innerHTML = '<option value="data/latest.csv" data-is-latest="true">Τελευταία ενημέρωση</option>';
@@ -407,8 +488,13 @@ function applyFilters() {
         let aVal = a[sortKey] || '';
         let bVal = b[sortKey] || '';
         
+        // Special handling for date sorting with Greek month names
+        if (sortKey === 'date') {
+            aVal = parseGreekDate(a.date);
+            bVal = parseGreekDate(b.date);
+        }
         // Special handling for price sorting
-        if (sortKey === 'price') {
+        elseif (sortKey === 'price') {
             aVal = parseFloat((a.discount_price || a.price || '0').replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
             bVal = parseFloat((b.discount_price || b.price || '0').replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
         }
