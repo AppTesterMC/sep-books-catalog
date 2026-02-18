@@ -143,13 +143,13 @@ def extract_product(url):
     repub_info = repub_info_elem.text.replace('Έκδοση:', '').replace(',', '$') if repub_info_elem else ''
     
     # Construct issue info
-    if year:
-        issue_info = f"{month} {year}".strip()
-    elif repub_year:
+    if repub_year or repub_month:
         if repub_info:
             issue_info = f"{repub_month} {repub_year}({repub_info} έκδοση)".strip()
         else:
             issue_info = f"{repub_month} {repub_year}".strip()
+    elif year or month:
+        issue_info = f"{month} {year}".strip()
     else:
         issue_info = ''
         
