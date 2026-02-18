@@ -53,14 +53,11 @@ const GREEK_MONTHS = {
 function parseGreekDate(dateStr) {
     if (!dateStr) return 0;
     
-    const cleanDate = dateStr.trim();
-    
-    // Check for year with edition in parentheses
-    const editionMatch = cleanDate.match(/^\d{4}\s*\(/);
-    if (editionMatch) {
-        return parseInt(editionMatch[0])* 100;
-    }
-    
+    var cleanDate = dateStr.trim();
+    //Remove everything in parentheses
+    var rs = /\([^)]*\)/;
+    cleanDate = cleanDate.replace(rs,'');
+
     // Check if it's just a year (4 digits)
     if (/^\d{4}$/.test(cleanDate)) {
         return parseInt(cleanDate) * 100; // e.g., 1995 -> 199500
