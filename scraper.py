@@ -197,7 +197,7 @@ def extract_product(url, session):
     book_title = book_title_elem.text.replace(',', '$') if book_title_elem else ''
     
     # Extract author
-    author_info = parser.select_one('.brxe-text-basic > a')
+    author_info = parser.select_one('.brxe-code > a')
     author_info = author_info.text.replace(',', '$') if author_info else ''
     
     # Extract price
