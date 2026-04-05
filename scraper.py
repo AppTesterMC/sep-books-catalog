@@ -179,6 +179,62 @@ def extract_urls(start_url, session):
     
     return urls
 
+def extract_author(parser):
+    """
+    Extract author with multiple fallback methods.
+    The website structure may vary, so we try several approaches.
+    """
+    # Method 1: Try the original selector
+    author_elem = parser.select_one('.brxe-code > div > a')
+    if author_elem and author_elem.text.strip():
+        return author_elem.text.strip().replace(',', '$')
+        
+    # Method 3: Look for text containing "Συγγραφέας:" (Author:)
+    all_text = parser.get_text()
+    if 'Συγγραφέας:' in all_text:
+        # Find the line with author
+        lines = all_text.split('\n')
+        for line in lines:
+            if 'Συγγραφέας:' in line:
+                # Extract author name after the colon
+                author_part = line.split('Συγγραφέας:')[-1].strip()
+                # Remove any extra text or links
+                author_name = author_part.split('[')[0].strip()
+                if author_name:
+                    return author_name.replace(',', '$')
+    
+    # Method 2: Look for link with /contributor/ in href
+    contributor_links = parser.find_all('a', href=lambda href: href and '/contributor/' in href)
+    if contributor_links:
+        for link in contributor_links:
+            if link.text.strip():
+                return link.text.strip().replace(',', '$')
+
+    
+    # Method 4: Try finding by class that might contain author
+    potential_classes = [
+        '.brxe-text-basic',
+        '.product-author',
+        '[class*="author"]',
+        '[data-author]'
+    ]
+    
+    for selector in potential_classes:
+        try:
+            elem = parser.select_one(selector)
+            if elem:
+                # Check if it contains a link
+                link = elem.find('a')
+                if link and link.text.strip():
+                    return link.text.strip().replace(',', '$')
+                # Otherwise use text directly
+                if elem.text.strip():
+                    return elem.text.strip().replace(',', '$')
+        except:
+            continue
+    
+    # If all methods fail, return empty string
+    return ''
 
 def extract_product(url, session):
     """Extract product information from a product page."""
@@ -197,8 +253,10 @@ def extract_product(url, session):
     book_title = book_title_elem.text.replace(',', '$') if book_title_elem else ''
     
     # Extract author
-    author_info = parser.select_one('.brxe-code > a')
-    author_info = author_info.text.replace(',', '$') if author_info else ''
+    #author_info = parser.select_one('.brxe-code > div > a')
+    #author_info = author_info.text.replace(',', '$') if author_info else ''
+    # Extract author using robust method
+    author_info = extract_author(parser)
     
     # Extract price
     price_elem = parser.find('p', {'class': 'price'})
