@@ -157,7 +157,7 @@ def get_total_books_and_pages(start_url, session):
     
     books_per_page = 20.0
     pages_safeguard = 4.0
-    total_pages = math.ceil(total_books / books_per_page) + pages_safeguard
+    total_pages = int(math.ceil(total_books / books_per_page) + pages_safeguard)
     total_books = int(total_books)
     
     return total_books, total_pages
