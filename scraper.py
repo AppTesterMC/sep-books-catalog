@@ -156,8 +156,8 @@ def get_total_books_and_pages(start_url, session):
                 continue
     
     books_per_page = 20.0
-    pages_safeguard = 4.0
-    total_pages = int(math.ceil(total_books / books_per_page) + pages_safeguard)
+    pages_safeguard_percent = 50.0
+    total_pages = int(math.ceil((total_books / books_per_page)*(1+pages_safeguard_percent/100))
     total_books = int(total_books)
     
     return total_books, total_pages
