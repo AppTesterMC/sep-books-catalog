@@ -433,7 +433,7 @@ def main():
         print(f"   Completed categories: {', '.join(checkpoint_data['completed_categories']) if checkpoint_data['completed_categories'] else 'None'}")
     
     categories = [
-        ("", "General Books"),
+        #("", "General Books"),
         ("omilos-ekpaideytikoy-provlimatismoy", "Educational Circle"),
         ("biblia-poy-diathetei-h-se", "SE Publications"),
         ("vivlia-allon-ekdoton", "Other Publishers"),
