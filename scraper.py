@@ -15,9 +15,9 @@ import glob
 
 
 # Configuration
-DELAY_BETWEEN_REQUESTS = (3.0, 6.0)  # Random delay between 3-6 seconds per request
-DELAY_BETWEEN_PAGES = (5.0, 10.0)    # Random delay between 5-10 seconds per page
-DELAY_BETWEEN_CATEGORIES = (10.0, 15.0)  # Random delay between 10-15 seconds per category
+DELAY_BETWEEN_REQUESTS = (2.0, 4.0)  # Random delay between 3-6 seconds per request
+DELAY_BETWEEN_PAGES = (3.0, 6.0)    # Random delay between 5-10 seconds per page
+DELAY_BETWEEN_CATEGORIES = (5.0, 8.0)  # Random delay between 10-15 seconds per category
 MAX_CONSECUTIVE_FAILURES = 5  # Stop category if 5 failures in a row
 CHECKPOINT_FREQUENCY = 50  # Save progress every 50 books
 
