@@ -1,8 +1,13 @@
 [
   {
     "filename": "latest.csv",
-    "date": "01/06/2026",
-    "display": "1 Ιούνη 2026"
+    "date": "04/06/2026",
+    "display": "4 Ιούνη 2026"
+  },
+  {
+    "filename": "20260604_sep_data.csv",
+    "date": "04/06/2026",
+    "display": "4 Ιούνη 2026"
   },
   {
     "filename": "20260601_sep_data.csv",
